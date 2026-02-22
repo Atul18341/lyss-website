@@ -22,7 +22,7 @@ export interface TestimonialData {
 }
 
 // Translation Interface
-interface Translation {
+export interface Translation {
   nav: {
     solutions: string;
     overview: string;

@@ -3,6 +3,7 @@ import React, { useState, useEffect, MouseEvent } from 'react';
 import { content,FeedbackCategory,TestimonialData } from './translations';
 import Navbar from './components/Navbar';
 import ClientProjects from './components/client-projects-cards';
+import Footer from './components/Footer';
 const getInitialLanguage = (): 'en' | 'hi' => {
   if (typeof window !== 'undefined') {
     const savedLang = localStorage.getItem('lyss-pref-lang');
@@ -742,51 +743,8 @@ const App: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-1">
-              <div className="flex items-center gap-2 mb-4 text-white">
-                <i className="fa-solid fa-layer-group text-purple-800"></i>
-                <span className="font-bold text-xl">LYSS Technology</span>
-              </div>
-              <p className="text-sm leading-relaxed">
-                {t.footer.desc}
-              </p>
-            </div>
-            <div>
-              <h4 className="text-white font-bold mb-4">{t.footer.quickLinks}</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#services"  className="hover:text-purple-300 transition-colors">{t.nav.solutions}</a></li>
-                <li><a href="#education" className="hover:text-purple-300 transition-colors">{t.nav.training}</a></li>
-                <li><a href="#about"  className="hover:text-purple-300 transition-colors">{t.nav.about}</a></li>
-                <li><a href="#contact"className="hover:text-purple-300 transition-colors">{t.nav.contact}</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-bold mb-4">{t.footer.training}</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-purple-300 transition-colors">{t.education.school1}</a></li>
-                <li><a href="#" className="hover:text-purple-300 transition-colors">{t.education.college1}</a></li>
-                <li><a href="#" className="hover:text-purple-300 transition-colors">{t.education.college2}</a></li>
-                <li><a href="#" className="hover:text-purple-300 transition-colors">{t.education.college3}</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-bold mb-4">{t.footer.connect}</h4>
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2"><i className="fa-brands fa-whatsapp"></i> +91 62056 95667 </li>
-                <li className="flex items-center gap-2"><i className="fa-regular fa-envelope"></i> support@lyss.in</li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-slate-800 mt-12 pt-8 text-sm text-center">
-            &copy; 2024 LYSS Technology. {t.footer.rights}
-          </div>
-        </div>
-      </footer>
+      <Footer t={t} />
+      
     </div>
     </div>
   );
