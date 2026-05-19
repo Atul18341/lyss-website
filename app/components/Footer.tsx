@@ -1,8 +1,8 @@
 "use client";
 import React from 'react';
+import Link from 'next/link';
 // Import the Translation interface to use for props typing
 import { Translation } from '../translations';
-
 // Define props to expect the full translation object (or specific parts)
 interface FooterProps {
   t: Translation;
@@ -67,8 +67,10 @@ const Footer: React.FC<FooterProps> = ({ t }) => {
         <div className="border-t border-slate-800 mt-12 pt-8 text-xs text-center flex flex-col md:flex-row justify-between items-center gap-4">
           <p>&copy; 2024-{new Date().getFullYear()} LYSS Technology Pvt Ltd. {t.footer.rights}</p>
           <div className="flex gap-6">
-            <a href="/privacy-page" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="/terms-page" className="hover:text-white transition-colors">Terms of Service</a>
+            <Link href="/checkout-page" className="hover:text-white transition-colors">Checkout</Link>
+            <Link href="/privacy-page" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/terms-page" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/refund-page" className="hover:text-white transition-colors text-purple-400 font-medium">Cancellation & Refund Policy</Link>
           </div>
         </div>
       </div>

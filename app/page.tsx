@@ -504,7 +504,7 @@ const App: React.FC = () => {
               <div>
                 <div className="text-xs text-purple-300">{t.contact.visit}</div>
                 <div className="font-medium">
-                  Madhubani, Bihar <br/>
+                  Lakho Binda Campus, Santu nagar, Madhubani, Bihar <br/>
                   PIN: 847211
                 </div>
               </div>
@@ -517,7 +517,7 @@ const App: React.FC = () => {
           <a href="#" className="w-8 h-8 rounded-full bg-purple-800 hover:bg-white hover:text-purple-900 transition-colors flex items-center justify-center">
             <i className="fa-brands fa-instagram"></i>
           </a>
-          <a href="#" className="w-8 h-8 rounded-full bg-purple-800 hover:bg-white hover:text-purple-900 transition-colors flex items-center justify-center">
+          <a href="https://www.linkdin.com/company/lyss-technology" className="w-8 h-8 rounded-full bg-purple-800 hover:bg-white hover:text-purple-900 transition-colors flex items-center justify-center">
             <i className="fa-brands fa-linkedin-in"></i>
           </a>
         </div>

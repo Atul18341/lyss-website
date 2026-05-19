@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, MouseEvent } from 'react';
+import Link from 'next/link';
 const menuItems = [
   { name: "Home", href: "/" },
   { name: "Our Vision", href: "/about" },
@@ -62,19 +63,12 @@ const Navbar: React.FC<NavbarProps> = ({ t, language, setLanguage }) => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-8 items-center">
-            <div className="relative group">
-              <button onClick={(e) => scrollToSection(e, 'services')} className="flex items-center gap-1 text-slate-300 group-hover:text-white font-medium transition-colors py-2">
-                {t.solutions} <i className="fa-solid fa-chevron-down text-xs ml-1 transition-transform group-hover:rotate-180"></i>
-              </button>
-              <div className="absolute top-full left-0 w-64 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2 pointer-events-none group-hover:pointer-events-auto">
-                <div className="bg-slate-900 rounded-xl shadow-xl border border-slate-700 overflow-hidden">
-                  <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="block px-4 py-3 text-sm text-slate-300 hover:bg-slate-800 hover:text-white border-b border-slate-800">
-                    <div className="font-semibold text-purple-400 mb-0.5">{t.overview}</div>
-                    <div className="text-xs text-slate-500">{t.allServices}</div>
-                  </a>
-                </div>
-              </div>
-            </div>
+            <Link 
+            href="/solutions" 
+            className="hover:text-purple-700 transition-colors cursor-pointer"
+          >
+            {t.solutions} {/* Renders "Business Solutions" or "व्यावसायिक समाधान" */}
+          </Link>
 
             <a href="#projects" onClick={(e) => scrollToSection(e, 'projects')} className="text-slate-300 hover:text-white font-medium transition-colors">{t.projects}</a>
             <a href="#education" onClick={(e) => scrollToSection(e, 'education')} className="text-slate-300 hover:text-white font-medium transition-colors">{t.training}</a>
