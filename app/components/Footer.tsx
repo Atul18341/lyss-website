@@ -32,7 +32,7 @@ const Footer: React.FC<FooterProps> = ({ t }) => {
             <h4 className="text-white font-bold mb-4">{t.footer.quickLinks}</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="#services" className="hover:text-purple-300 transition-colors">{t.nav.solutions}</a></li>
-              <li><a href="#education" className="hover:text-purple-300 transition-colors">{t.nav.training}</a></li>
+              {/*<li><a href="#education" className="hover:text-purple-300 transition-colors">{t.nav.training}</a></li>*/}
               <li><a href="#about" className="hover:text-purple-300 transition-colors">{t.nav.about}</a></li>
               <li><a href="#contact" className="hover:text-purple-300 transition-colors">{t.nav.contact}</a></li>
             </ul>
