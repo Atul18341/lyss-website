@@ -39,13 +39,13 @@ const SolutionsPage = () => {
       name: "KaryaPal (Lyss Flow)",
       tagline: "Manufacturing Process Tracker",
       description: "Real-time production pipeline monitoring system engineered for regional manufacturing units. Track raw materials, factory stages, and labor throughput inside an intuitive supervisor dashboard.",
-      type: "Enterprise",
+      type: "SaaS",
       price: 15000, // Enterprise license deployment baseline
       badgeColor: "bg-blue-600 text-white",
       icon: "fa-solid fa-timeline",
       features: ["Real-time Stage Optimization", "Raw Material Log Tracking", "Supervisor Audit Controls", "Secure Multi-User Access Management"]
     },
-    {
+    /*{
       id: "atplc-automation",
       name: "ATPLC Robotics & IoT Masterclass",
       tagline: "Industrial Training Streams",
@@ -55,7 +55,17 @@ const SolutionsPage = () => {
       badgeColor: "bg-amber-500 text-black",
       icon: "fa-solid fa-microchip",
       features: ["Hardware Prototyping Kits Included", "Industrial PLC Architecture Training", "Verified Practical Module Assessment", "Direct Internship Certification"]
-    }
+    }*/{
+    id: "mithila-aayojan-stall",
+    name: "Mithila Aayojan",
+    tagline: "Event & Stall Management Portal",
+    description: "Comprehensive event booking and logistics infrastructure for cultural exhibitions. Register, choose layouts, and reserve commercial stalls securely with automated allocation records.",
+    type: "SaaS",
+    price: 4500, // Flat promotional stall baseline rate
+    badgeColor: "bg-orange-600 text-white",
+    icon: "fa-solid fa-store",
+    features: ["Guaranteed 7x5 Fit Space Allocation", "Integrated Vendor Identity Pass", "Complimentary Power & Lighting Grid", "Strict Non-Transferable Security Pass"]
+}
   ];
 
   // Route handling logic passing the chosen configuration to the checkout page
