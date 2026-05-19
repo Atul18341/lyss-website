@@ -39,7 +39,7 @@ const Footer: React.FC<FooterProps> = ({ t }) => {
           </div>
 
           {/* Training Academy Links */}
-          <div>
+          {/*<div>
             <h4 className="text-white font-bold mb-4">{t.footer.training}</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="#" className="hover:text-purple-300 transition-colors">{t.education.school1}</a></li>
@@ -47,7 +47,7 @@ const Footer: React.FC<FooterProps> = ({ t }) => {
               <li><a href="#" className="hover:text-purple-300 transition-colors">{t.education.college2}</a></li>
               <li><a href="#" className="hover:text-purple-300 transition-colors">{t.education.college3}</a></li>
             </ul>
-          </div>
+          </div>*/}
 
           {/* Connect / Social */}
           <div>

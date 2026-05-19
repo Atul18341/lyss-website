@@ -180,9 +180,9 @@ const App: React.FC = () => {
               <a href="#contact" className="px-8 py-4 rounded-lg bg-purple-900 text-white font-bold hover:bg-purple-800 transition-all shadow-lg hover:shadow-purple-900/30 flex items-center justify-center gap-2">
                 {t.hero.btnPrimary} <i className="fa-solid fa-arrow-right"></i>
               </a>
-              <a href="#education" className="px-8 py-4 rounded-lg bg-transparent text-white font-bold hover:bg-slate-800 transition-all border border-slate-600 flex items-center justify-center gap-2">
+              {/*<a href="#education" className="px-8 py-4 rounded-lg bg-transparent text-white font-bold hover:bg-slate-800 transition-all border border-slate-600 flex items-center justify-center gap-2">
                 {t.hero.btnSecondary} <i className="fa-solid fa-graduation-cap"></i>
-              </a>
+              </a>*/}
             </div>
           </div>
           
@@ -345,8 +345,8 @@ const App: React.FC = () => {
       <ClientProjects t={t.projects} />
 
       {/* Education & Training Section */}
-      <section id="education" className="py-24 bg-slate-900 relative overflow-hidden">
-        {/* Background Pattern */}
+      {/*<section id="education" className="py-24 bg-slate-900 relative overflow-hidden">
+        
         <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'radial-gradient(#64748b 1px, transparent 1px)', backgroundSize: '32px 32px'}}></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -364,7 +364,7 @@ const App: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Training Card 1: Schools */}
+            
             <div className="bg-slate-800 rounded-2xl p-1 overflow-hidden hover:ring-2 hover:ring-purple-800 transition-all">
               <div className="bg-gradient-to-r from-purple-900 to-purple-950 p-6 rounded-t-xl">
                 <div className="flex justify-between items-start">
@@ -403,7 +403,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Training Card 2: Colleges */}
-            <div className="bg-slate-800 rounded-2xl p-1 overflow-hidden hover:ring-2 hover:ring-amber-500 transition-all">
+            {/*<div className="bg-slate-800 rounded-2xl p-1 overflow-hidden hover:ring-2 hover:ring-amber-500 transition-all">
               <div className="bg-gradient-to-r from-amber-600 to-amber-800 p-6 rounded-t-xl">
                 <div className="flex justify-between items-start">
                   <div>
@@ -441,7 +441,6 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          {/* Stats */}
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-center border-t border-slate-700 pt-8">
             <div>
               <div className="text-3xl font-bold text-white">500+</div>
@@ -461,7 +460,7 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section>*/}
       {/* Contact Section */}
       <section id="contact" className="py-24 bg-slate-50">
   <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -653,6 +652,7 @@ const App: React.FC = () => {
             ))}
           </div>
         </div>
+         <div className='text-center mt-3'>View our training feedback on our training platorm,<a href="https://atplc.in/feedbacks" className="text-purple-900 font-bold"> ATPLC </a>website.</div>
       </section>
 
       {/* Feedback Form Section */}
