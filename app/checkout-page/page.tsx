@@ -48,7 +48,7 @@ const Checkout = () => {
           description: `Secure processing framework configuration setup for ${parsedItem.itemName}.`,
           requiresGst: parsedItem.itemId !== 'subsidized-stall' // Keeps regional micro-artisan rates tax-exempt if necessary
         });
-        
+        console.log("Cart-Item:"+cartItem)
         // Optional: clear item context post instantiation to manage history memory cleanups
         // sessionStorage.removeItem('pendingCheckout');
       } catch (error) {
@@ -61,34 +61,40 @@ const Checkout = () => {
 
   // Function to mount and pull Paytm Checkout layer
   const openPaytmBlinkCheckout = (mid: string, orderId: string, txnToken: string) => {
-    const config = {
-      root: "",
-      flow: "DEFAULT",
-      data: {
-        orderId: orderId,
-        token: txnToken,
-        tokenType: "TXN_TOKEN",
-        amount: totalAmount.toFixed(2)
-      },
-      handler: {
-        notifyMerchant: function (eventName: string, data: any) {
-          console.log("Paytm Notification Received:", eventName, data);
-        }
+  const config = {
+    root: "",
+    flow: "DEFAULT",
+    data: {
+      orderId: orderId,
+      token: txnToken,
+      tokenType: "TXN_TOKEN",
+      amount: totalAmount.toFixed(2)
+    },
+    handler: {
+      notifyMerchant: function (eventName: string, data: any) {
+        console.log("Paytm Notification Event Received:", eventName, data);
       }
-    };
+    }
+  };
 
-    if ((window as any).Paytm && (window as any).Paytm.CheckoutJS) {
+  // CRITICAL FIX: Wrap execution block inside Paytm's official onLoad listener callback
+  if ((window as any).Paytm && (window as any).Paytm.CheckoutJS) {
+    (window as any).Paytm.CheckoutJS.onLoad(function executeAfterCompleteLoad() {
       (window as any).Paytm.CheckoutJS.init(config)
         .then(() => {
           (window as any).Paytm.CheckoutJS.invoke();
           setLoading(false);
         })
         .catch((err: any) => {
-          console.error("Paytm Initialization failed:", err);
+          console.error("Paytm Internal Window Init failed:", err);
           setLoading(false);
         });
-    }
-  };
+    });
+  } else {
+    alert("Paytm SDK script layer not loaded completely yet. Please wait a second.");
+    setLoading(false);
+  }
+};
 
   const initiaitePaymentPipeline = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,7 +127,8 @@ const Checkout = () => {
         throw new Error("Missing response token context");
       }
     } catch (error) {
-      alert("Payment engine connection error. Please try alternative methods.");
+      console.error("Frontend Fetch Exception:", error);
+  alert("Network connection drop. Verify server console terminal logs.");
       setLoading(false);
     }
   };

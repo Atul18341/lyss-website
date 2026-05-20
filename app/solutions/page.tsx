@@ -61,7 +61,7 @@ const SolutionsPage = () => {
     tagline: "Event & Stall Management Portal",
     description: "Comprehensive event booking and logistics infrastructure for cultural exhibitions. Register, choose layouts, and reserve commercial stalls securely with automated allocation records.",
     type: "SaaS",
-    price: 4500, // Flat promotional stall baseline rate
+    price: 1, // Flat promotional stall baseline rate
     badgeColor: "bg-orange-600 text-white",
     icon: "fa-solid fa-store",
     features: ["Guaranteed 7x5 Fit Space Allocation", "Integrated Vendor Identity Pass", "Complimentary Power & Lighting Grid", "Strict Non-Transferable Security Pass"]
