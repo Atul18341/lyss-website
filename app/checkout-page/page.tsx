@@ -60,38 +60,47 @@ const Checkout = () => {
   const totalAmount = cartItem.requiresGst ? cartItem.price * 1.18 : cartItem.price;
 
   // Function to mount and pull Paytm Checkout layer
-  const openPaytmBlinkCheckout = (mid: string, orderId: string, txnToken: string) => {
+  const openPaytmBlinkCheckout = (
+  mid: string,
+  orderId: string,
+  txnToken: string
+) => {
+
   const config = {
     root: "",
     flow: "DEFAULT",
     data: {
-      orderId: orderId,
+      orderId,
       token: txnToken,
       tokenType: "TXN_TOKEN",
-      amount: totalAmount.toFixed(2)
+      amount: totalAmount.toFixed(2),
     },
     handler: {
       notifyMerchant: function (eventName: string, data: any) {
-        console.log("Paytm Notification Event Received:", eventName, data);
-      }
-    }
+        console.log("Paytm Event:", eventName, data);
+      },
+    },
   };
 
-  // CRITICAL FIX: Wrap execution block inside Paytm's official onLoad listener callback
-  if ((window as any).Paytm && (window as any).Paytm.CheckoutJS) {
-    (window as any).Paytm.CheckoutJS.onLoad(function executeAfterCompleteLoad() {
-      (window as any).Paytm.CheckoutJS.init(config)
-        .then(() => {
-          (window as any).Paytm.CheckoutJS.invoke();
-          setLoading(false);
-        })
-        .catch((err: any) => {
-          console.error("Paytm Internal Window Init failed:", err);
-          setLoading(false);
-        });
-    });
+  if (
+    typeof window !== "undefined" &&
+    (window as any).Paytm &&
+    (window as any).Paytm.CheckoutJS
+  ) {
+    (window as any).Paytm.CheckoutJS.init(config)
+      .then(() => {
+        (window as any).Paytm.CheckoutJS.invoke();
+      })
+      .catch((error: any) => {
+        console.error("Paytm Init Error:", error);
+        alert("Unable to initialize payment gateway.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   } else {
-    alert("Paytm SDK script layer not loaded completely yet. Please wait a second.");
+    console.error("Paytm SDK Missing");
+    alert("Payment SDK not loaded.");
     setLoading(false);
   }
 };
@@ -100,7 +109,8 @@ const Checkout = () => {
     e.preventDefault();
     setLoading(true);
 
-    const targetOrderId = `LYSS_ORDER_${Date.now()}`;
+    // Inside your frontend click handler:
+const targetOrderId = `LYSS_ORDER_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
     const targetCustId = `CUST_${customer.mobile || 'GUEST'}`;
 
     try {
@@ -119,7 +129,7 @@ const Checkout = () => {
       });
 
       const paymentData = await res.json();
-
+       console.log("payment-Data:",paymentData.txnToken)
       if (paymentData.txnToken) {
         // 2. Launch token configurations directly inside client UI framework
         openPaytmBlinkCheckout(paymentData.mid, paymentData.orderId, paymentData.txnToken);
@@ -136,11 +146,14 @@ const Checkout = () => {
   return (
     <div className="bg-slate-50 min-h-screen">
       {/* Load Paytm scripts dynamically securely over standard window layer */}
-      <Script 
-        type="text/javascript" 
-        src="https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/UgSSdh19535390771074.js" 
-        strategy="lazyOnload"
-      />
+        <Script
+    id="paytm-checkout-js"
+    strategy="afterInteractive"
+    src="https://securestage.paytmpayments.com/merchantpgpui/checkoutjs/merchants/UgSSdh19535390771074.js"
+    onLoad={() => {
+      console.log("Paytm SDK Loaded");
+    }}
+/>
       
       <Navbar t={t.nav} language={language} setLanguage={() => {}} />
 
