@@ -10,48 +10,46 @@ export async function POST(req: Request) {
 
     const formData = await req.formData();
 
-    const paytmParams: Record<string, string> = {};
+    const responseParams: Record<string, string> = {};
 
     formData.forEach((value, key) => {
-      paytmParams[key] = value.toString();
+      responseParams[key] = value.toString();
     });
+    const checksum = responseParams.CHECKSUMHASH;
 
-    console.log("Paytm Callback:", paytmParams);
-
-    const checksum = paytmParams.CHECKSUMHASH;
-
-    delete paytmParams.CHECKSUMHASH;
+    delete responseParams.CHECKSUMHASH;
 
     const isValidChecksum =
       PaytmChecksum.verifySignature(
-        paytmParams as any,
+        responseParams as any,
         process.env.PAYTM_MERCHANT_KEY!,
         checksum
       );
+    const status = responseParams.STATUS;
+    const orderId = responseParams.ORDERID;
+    const txnId = responseParams.TXNID;
+    const amount = responseParams['TXNAMOUNT'];
 
-    if (!isValidChecksum) {
-
-      return NextResponse.json(
-        {
-          error:
-            "Security Alert: Invalid transaction signature handshake match"
-        },
-        { status: 400 }
+    if (!isValidChecksum && status != 'TXN_SUCCESS') {
+      // ❌ FAILURE LOGIC: Handle declined operations gracefully
+      return NextResponse.redirect(
+        new URL(`/checkout/status?status=failed&order=${orderId}`, req.url),
+        303
       );
     }
+    else{
+    // ✅ SUCCESS LOGIC: Update your database status here!
+      // await db.order.update({ where: { id: orderId }, data: { paid: true, transactionId: txnId } });
+      
+      return NextResponse.redirect(
+        new URL(`/checkout/status?status=success&order=${orderId}&amt=${amount}`, req.url),
+        303
+      );
 
-    return NextResponse.json({
-      success: true,
-      transaction: paytmParams
-    });
-
+      }
   } catch (error) {
-
     console.error(error);
-
-    return NextResponse.json(
-      { error: "Callback verification failed" },
-      { status: 500 }
-    );
+    console.error("Callback crash:", error);
+    return NextResponse.redirect(new URL('/checkout/status?status=error', req.url), 303);
   }
 }
