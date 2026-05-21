@@ -1,4 +1,5 @@
 'use react';
+'use client';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
