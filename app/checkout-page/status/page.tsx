@@ -1,8 +1,7 @@
 'use react';
-'use client';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-
+import { Suspense } from "react";
 export default function PaymentStatusPage() {
   const searchParams = useSearchParams();
   const status = searchParams.get('status');
@@ -10,6 +9,7 @@ export default function PaymentStatusPage() {
   const amount = searchParams.get('amt');
 
   return (
+    <Suspense fallback={ <div className="p-6 text-sm text-slate-500">Verifying Payment status...</div>}>
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center border border-gray-100">
         
@@ -29,7 +29,7 @@ export default function PaymentStatusPage() {
           <div>
             <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">✕</div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Payment Declined</h1>
-            <p className="text-gray-600 mb-6">The bank refused to complete the transaction authorization request.</p>
+            <p className="text-gray-600 mb-6">The bank refused to complete the transaction authorization request. Kindly try again or after sometime.</p>
           </div>
         )}
 
@@ -37,7 +37,7 @@ export default function PaymentStatusPage() {
           <div>
             <div className="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">!</div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">System Processing Loop Interrupted</h1>
-            <p className="text-gray-600 mb-6">We are currently verifying the deposit ledger manually with the node server network.</p>
+            <p className="text-gray-600 mb-6">We are currently verifying the deposit ledger manually with the paytm.</p>
           </div>
         )}
 
@@ -46,5 +46,6 @@ export default function PaymentStatusPage() {
         </Link>
       </div>
     </div>
+    </Suspense>
   );
 }
