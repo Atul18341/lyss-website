@@ -29,20 +29,20 @@ export async function POST(req: Request) {
     const orderId = responseParams.ORDERID;
     const txnId = responseParams.TXNID;
     const amount = responseParams['TXNAMOUNT'];
+    const responseCode =responseParams.RESPCODE;
+    if (isValidChecksum && status === "TXN_SUCCESS" && responseCode === "01") {
+      // ✅ SUCCESS LOGIC: Update your database status here!
+      // await db.order.update({ where: { id: orderId }, data: { paid: true, transactionId: txnId } });
 
-    if (!isValidChecksum && status != 'TXN_SUCCESS') {
-      // ❌ FAILURE LOGIC: Handle declined operations gracefully
       return NextResponse.redirect(
-        new URL(`/checkout-page/status?status=failed&order=${orderId}`, req.url),
+        new URL(`/checkout-page/status?status=success&order=${orderId}&amt=${amount}`, req.url),
         303
       );
     }
     else{
-    // ✅ SUCCESS LOGIC: Update your database status here!
-      // await db.order.update({ where: { id: orderId }, data: { paid: true, transactionId: txnId } });
-      
+    // ❌ FAILURE LOGIC: Handle declined operations gracefully
       return NextResponse.redirect(
-        new URL(`/checkout-page/status?status=success&order=${orderId}&amt=${amount}`, req.url),
+        new URL(`/checkout-page/status?status=failed&order=${orderId}`, req.url),
         303
       );
 
@@ -50,6 +50,6 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error(error);
     console.error("Callback crash:", error);
-    return NextResponse.redirect(new URL('/checkout/status?status=error', req.url), 303);
+    return NextResponse.redirect(new URL('/checkout-page/status?status=error', req.url), 303);
   }
 }
