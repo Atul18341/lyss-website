@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       body: {
         requestType: "Payment",
         mid: activeMid,
-        websiteName: "DEFAULT",
+        websiteName: "WEBSTAGING",
         orderId: orderId.trim(),
         callbackUrl: "https://lyss.in/api/paytm/callback", // 👈 Paytm redirects back to this server handler
         txnAmount: { value: Number(amount).toFixed(2), currency: "INR" },
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     const checksum = await PaytmChecksum.generateSignature(JSON.stringify(paytmParams.body), merchantKey);
     paytmParams.head = { signature: checksum };
 
-    const paytmUrl = `https://secure.paytmpayments.com/theia/api/v1/initiateTransaction?mid=${activeMid}&orderId=${orderId.trim()}`;
+    const paytmUrl = `https://securestage.paytmpayments.com/theia/api/v1/initiateTransaction?mid=${activeMid}&orderId=${orderId.trim()}`;
     const response = await fetch(paytmUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
