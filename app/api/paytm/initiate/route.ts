@@ -1,10 +1,9 @@
 // 📁 src/app/api/paytm/initiate/route.ts
 import { NextResponse } from 'next/server';
-import PaytmChecksum from 'paytmchecksum';
 
 export async function POST(request: Request) {
   try {
-    // 1. Consolidate the client body JSON stream data exactly once
+    // 1. SAFE SINGLE READ: Consume the request payload stream exactly once
     const data = await request.json();
     
     const { 
@@ -12,102 +11,98 @@ export async function POST(request: Request) {
       whatsapp, university, college, course, department, universityRegNo, password 
     } = data;
 
-    const activeMid = process.env.PAYTM_MID!.trim();
-    const merchantKey = process.env.PAYTM_MERCHANT_KEY!.trim();
-    const customerId = `CUST_${mobile || 'GUEST'}`;
-
-    // ==========================================
-    // STEP A: CONFLICT-SAFE DATABASE REGISTRATION HANDSHAKE
-    // ==========================================
-    const djangoEndpoint = `${process.env.PYTHONANYWHERE_BACKEND_URL}/register/`;
-    
-    const djangoResponse = await fetch(djangoEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.DJANGO_SHARED_SECRET_KEY}`
-      },
-      body: JSON.stringify({
-        orderId, itemId, amount, name, email, mobile,
-        whatsapp, university, college, course, department, universityRegNo, password
-      })
-    });
-
-    const djangoData = await djangoResponse.json();
-
-    // 🚨 GATEKEEPER CRASH CONTROL: If Django rejects registration, halt processing immediately
-    if (!djangoResponse.ok) {
+    // 2. LAYER 1 ERROR HANDLING: Validate presence of critical structural data
+    if (!orderId || !email || !universityRegNo || !password) {
       return NextResponse.json(
-        { error: djangoData.error || "Registration validation error at core database layer." }, 
-        { status: djangoResponse.status }
-      );
-    }
-
-    // ==========================================
-    // STEP B: GENERATE SECURE CHECKSUM & PING PAYTM
-    // ==========================================
-    const paytmParams: any = {
-      body: {
-        requestType: "Payment",
-        mid: activeMid,
-        websiteName: "DEFAULT", // 💡 Fixed: Changed from WEBSTAGING to DEFAULT for production endpoints
-        orderId: orderId.trim(),
-        callbackUrl: "https://lyss.in/api/paytm/callback",
-        txnAmount: {
-          value: Number(amount).toFixed(2),
-          currency: "INR"
-        },
-        userInfo: {
-          custId: customerId.trim(),
-          mobile: mobile ? mobile.trim() : "",
-          email: email ? email.trim() : ""
-        }
-      }
-    };
-
-    // Calculate secure signature over the parameter payload layout body context
-    const checksum = await PaytmChecksum.generateSignature(
-      JSON.stringify(paytmParams.body),
-      merchantKey
-    );
-
-    paytmParams.head = {
-      signature: checksum
-    };
-
-    const paytmUrl = `https://secure.paytmpayments.com/theia/api/v1/initiateTransaction?mid=${activeMid}&orderId=${orderId.trim()}`;
-
-    const paytmFetchResponse = await fetch(paytmUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(paytmParams)
-    });
-
-    const result = await paytmFetchResponse.json();
-
-    // Verify Paytm didn't reject the checksum authorization key signature
-    if (!result.body || !result.body.txnToken) {
-      console.error("Paytm Gateway Rejection Error Payload:", result);
-      return NextResponse.json(
-        { error: result.body?.resultInfo?.resultMsg || "Payment token generation failed." },
+        { error: "Validation Failed: Missing critical registration parameters (Email, Registration No., or Password)." },
         { status: 400 }
       );
     }
 
-    // Return properties safely to activate window overlay execution controls
+    // 3. LAYER 2 ERROR HANDLING: Verify server-side environmental infrastructure keys exist
+    const backendUrl = process.env.PYTHONANYWHERE_BACKEND_URL;
+    const djangoSecret = process.env.DJANGO_SHARED_SECRET_KEY;
+
+    if (!backendUrl || !djangoSecret) {
+      console.error("CRITICAL CONFIG ERROR: Missing system environment variables in .env.local");
+      return NextResponse.json(
+        { error: "Internal Configuration Error: Backend gateway keys are unassigned." },
+        { status: 500 }
+      );
+    }
+
+    // Clean up backend variables to remove accidental whitespaces or newline slips
+    const cleanDjangoEndpoint = `${backendUrl.trim()}/register/`;
+    const cleanAuthToken = `Bearer ${djangoSecret.trim()}`;
+
+    console.log(`[Database Handshake Launched] Forwarding Order ID: ${orderId} to Django...`);
+
+    // ==========================================================
+    // LAYER 3 ERROR HANDLING: Execution of Secure Database Write Handshake
+    // ==========================================================
+    let djangoResponse;
+    try {
+      djangoResponse = await fetch(cleanDjangoEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': cleanAuthToken
+        },
+        body: JSON.stringify({
+          orderId: orderId.trim(),
+          itemId,
+          amount,
+          name,
+          email: email.trim(),
+          mobile,
+          whatsapp,
+          university,
+          college,
+          course,
+          department,
+          universityRegNo: universityRegNo.trim(),
+          password
+        }),
+        cache: 'no-store' // Bypasses Next.js default build caching systems
+      });
+    } catch (networkError: any) {
+      // Catches instances where PythonAnywhere is entirely down or DNS fails
+      console.error("FATAL: Django Server is completely unreachable:", networkError);
+      return NextResponse.json(
+        { error: "Database Link Down: Remote internship database server could not be reached." },
+        { status: 503 } // 503 Service Unavailable
+      );
+    }
+
+    // Safely capture Django response payload context
+    const djangoData = await djangoResponse.json();
+
+    // 4. LAYER 4 ERROR HANDLING: Handle structural rejections from Django Models
+    // (e.g., Handles 400 Bad Request if University Registration Number or Email is already taken)
+    if (!djangoResponse.ok) {
+      console.warn(`[Registration Rejected by DB] Django Status: ${djangoResponse.status} | Reason:`, djangoData.error);
+      return NextResponse.json(
+        { error: djangoData.error || "Registration rejected due to database model constraint validations." }, 
+        { status: djangoResponse.status }
+      );
+    }
+
+    // ==========================================================
+    // SUCCESS TERMINAL ANCHOR
+    // ==========================================================
+    console.log(`[Registration Succeeded] Data successfully locked into SQLite for Order: ${orderId}`);
+    
     return NextResponse.json({
       success: true,
-      txnToken: result.body.txnToken,
-      orderId: orderId,
-      mid: activeMid
-    });
+      message: "Student record securely written to Django database as a pending application structure.",
+      orderId: orderId
+    }, { status: 201 });
 
-  } catch (error: any) {
-    console.error("Initiation Handler Crash Exception:", error);
+  } catch (globalError: any) {
+    // Catch-all safety nets for unexpected code parsing runtime failures
+    console.error("UNEXPECTED ROUTE ENGINE CRASH:", globalError);
     return NextResponse.json(
-      { error: "Internal payment processing engine crash." }, 
+      { error: "Internal processing crash inside the master checkout orchestration middleware." }, 
       { status: 500 }
     );
   }
