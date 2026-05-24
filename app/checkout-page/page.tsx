@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from "next/navigation";
 import Script from 'next/script'; // Clean script loader element built into Next.js
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -16,9 +17,12 @@ interface CheckoutItem {
 
 const Checkout = () => {
   const [language] = useState<'en' | 'hi'>('en');
+  const searchParams = useSearchParams();
+   const courseId = searchParams.get("courseId");
+   const provider = searchParams.get("provider");
   const t = content[language];
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [product, setProduct] = useState(null);
   // Form Fields State
   const [customer, setCustomer] = useState({ name: '', mobile: '', email: '' });
 
@@ -165,6 +169,8 @@ const targetOrderId = `LYSS_ORDER_${Date.now()}_${Math.floor(Math.random() * 100
             <form onSubmit={initiaitePaymentPipeline} className="space-y-6">
               <div>
                 <h3 className="text-lg font-bold text-slate-900 mb-4">1. Contact & Invoicing Information</h3>
+                <p>CourseId:{courseId}</p>
+          <p>Provider:{provider}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold uppercase text-slate-500 mb-2">Full Name</label>
@@ -174,6 +180,7 @@ const targetOrderId = `LYSS_ORDER_${Date.now()}_${Math.floor(Math.random() * 100
                       onChange={(e) => setCustomer({...customer, name: e.target.value})}
                       className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm" 
                     />
+                    
                   </div>
                   <div>
                     <label className="block text-xs font-bold uppercase text-slate-500 mb-2">Mobile Number</label>

@@ -75,7 +75,7 @@ const SolutionsPage = () => {
     itemId: item.id,
     itemName: item.name,
     itemPrice: item.price,
-    itemType: item.type
+    itemType: item.type 
   };
   
   sessionStorage.setItem('pendingCheckout', JSON.stringify(secureCheckoutPayload));

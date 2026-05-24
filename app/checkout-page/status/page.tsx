@@ -8,8 +8,7 @@ import Link from 'next/link';
 function StatusCardContent() {
   const searchParams = useSearchParams();
   const status = searchParams.get('status');
-  const orderId = searchParams.get('order');
-  const amount = searchParams.get('amt');
+  const txnId = searchParams.get('txnId');
 
   return (
     <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center border border-gray-100">
@@ -19,8 +18,7 @@ function StatusCardContent() {
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h1>
           <p className="text-gray-600 mb-6">Thank you. Your transaction completed securely.</p>
           <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left text-sm text-gray-600 space-y-2">
-            <div><strong>Order Reference ID:</strong> {orderId}</div>
-            <div><strong>Settled Amount:</strong> ₹{amount}</div>
+            <div><strong>Transaction ID:</strong> {txnId}</div>
           </div>
         </div>
       )}
@@ -29,7 +27,7 @@ function StatusCardContent() {
         <div>
           <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">✕</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Payment Declined</h1>
-          <p className="text-gray-600 mb-6">The bank refused to complete the transaction authorization request.</p>
+          <p className="text-gray-600 mb-6">The bank refused to complete the transaction authorization request. Kindly try again or after sometime.</p>
         </div>
       )}
 
@@ -37,7 +35,7 @@ function StatusCardContent() {
         <div>
           <div className="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold">!</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Processing Interrupted</h1>
-          <p className="text-gray-600 mb-6">We are verifying the deposit ledger manually with the node server network.</p>
+          <p className="text-gray-600 mb-6">Our team are verifying the deposit ledger manually with the Paytm and update you very soon.</p>
         </div>
       )}
 
