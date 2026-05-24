@@ -1,26 +1,24 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: {
+    params: Promise<{
+      id: string;
+    }>;
+  }
 ) {
 
   try {
 
+    const { id } = await context.params;
+
     const response = await fetch(
-      `https://atplc20.pythonanywhere.com/course/${params.id}/`,
+      `https://atplc20.pythonanywhere.com/course/${id}/`,
       {
         cache: "no-store",
       }
     );
-
-    if (!response.ok) {
-
-      return NextResponse.json(
-        { error: "Course not found" },
-        { status: 404 }
-      );
-    }
 
     const data = await response.json();
 
