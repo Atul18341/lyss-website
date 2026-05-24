@@ -45,10 +45,16 @@ export default function Checkout() {
       if (params.provider !== "atplc") return;
 
       const response = await fetch(
-        `/api/course/${params.id}`
+        `https://atplc20.pythonanywhere.com/course/${params.id}/`
       );
 
+      if (!response.ok) {
+        throw new Error("Failed to fetch course");
+      }
+
       const data = await response.json();
+
+      console.log("course-data:", data);
 
       const course = data.course;
 
@@ -65,7 +71,7 @@ export default function Checkout() {
 
     } catch (error) {
 
-      console.error(error);
+      console.error("Fetch Error:", error);
 
     }
 
