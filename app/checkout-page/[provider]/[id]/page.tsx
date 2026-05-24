@@ -15,7 +15,16 @@ interface CheckoutItem {
   requiresGst: boolean;
 }
 
-const Checkout = () => {
+export default function Checkout({
+  params,
+}: {
+  params: {
+    provider: string;
+    id: number;
+  };
+}) {
+  console.log("provider:",params.provider);
+  console.log("id:",params.id);
   const [language] = useState<'en' | 'hi'>('en');
   const searchParams = useSearchParams();
    const courseId = searchParams.get("courseId");
@@ -169,8 +178,6 @@ const targetOrderId = `LYSS_ORDER_${Date.now()}_${Math.floor(Math.random() * 100
             <form onSubmit={initiaitePaymentPipeline} className="space-y-6">
               <div>
                 <h3 className="text-lg font-bold text-slate-900 mb-4">1. Contact & Invoicing Information</h3>
-                <p>CourseId:{courseId}</p>
-          <p>Provider:{provider}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold uppercase text-slate-500 mb-2">Full Name</label>
@@ -259,5 +266,3 @@ const targetOrderId = `LYSS_ORDER_${Date.now()}_${Math.floor(Math.random() * 100
     </div>
   );
 };
-
-export default Checkout;
