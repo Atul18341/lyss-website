@@ -5,7 +5,7 @@ import Script from 'next/script';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
 import { content } from '../../../translations';
-
+import { saveToIndexedDB } from '@/app/utils/indexedDb'; // Import our fresh DB manager
 interface CheckoutItem {
   id: string;
   name: string;
@@ -114,16 +114,29 @@ export default function Checkout() {
     const targetOrderId = `LYSS_ORDER_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
     const targetCustId = `CUST_${customer.mobile || 'GUEST'}`;
 
-    try {
+    try {// ==========================================
+      // PHASE 1: LOCAL BROWSER CRASH PROTECTION (INDEXEDDB)
+      // ==========================================
+      console.log("Saving client backup snapshot to IndexedDB...");
+      const fullPayload = {
+        itemId: cartItem.id,
+        amount: totalAmount,
+        ...customer
+      };
+      
+      // Save data locally. If internet drops completely right now, data is not lost!
+      await saveToIndexedDB(targetOrderId, fullPayload);
+      console.log("IndexedDB commit confirmed.");
+      // ==========================================
+      // PHASE 2: SERVER-SIDE DATABASE HANDSHAKE (SECTION A)
+      // ==========================================
+      console.log("Initiating server-side verification tunnel...");
       const res = await fetch('/api/paytm/initiate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          itemId: cartItem.id,
-          amount: totalAmount,
           orderId: targetOrderId,
-          customerId: targetCustId,
-          ...customer // Pipes all fresh form entries down to your API backend handler seamlessly
+          ...fullPayload
         })
       });
 
