@@ -192,7 +192,7 @@ const targetOrderId = `LYSS_ORDER_${Date.now()}_${Math.floor(Math.random() * 100
         <Script
     id="paytm-checkout-js"
     strategy="afterInteractive"
-    src="https://securestage.paytmpayments.com/merchantpgpui/checkoutjs/merchants/UgSSdh19535390771074.js"
+    src="https://secure.paytmpayments.com/merchantpgpui/checkoutjs/merchants/imHHwX41542058372914.js"
     onLoad={() => {
       console.log("Paytm SDK Loaded");
     }}

@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     };
 
     const paytmUrl =
-      `https://securestage.paytmpayments.com/theia/api/v1/initiateTransaction?mid=${activeMid}&orderId=${orderId}`;
+      `https://secure.paytmpayments.com/theia/api/v1/initiateTransaction?mid=${activeMid}&orderId=${orderId}`;
 
     const response = await fetch(paytmUrl, {
       method: "POST",
