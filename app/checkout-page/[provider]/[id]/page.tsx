@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import Script from 'next/script'; // Clean script loader element built into Next.js
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
@@ -15,20 +15,11 @@ interface CheckoutItem {
   requiresGst: boolean;
 }
 
-export default function Checkout({
-  params,
-}: {
-  params: {
-    provider: string;
-    id: number;
-  };
-}) {
+export default function Checkout() {
+  const params = useParams();
   console.log("provider:",params.provider);
   console.log("id:",params.id);
   const [language] = useState<'en' | 'hi'>('en');
-  const searchParams = useSearchParams();
-   const courseId = searchParams.get("courseId");
-   const provider = searchParams.get("provider");
   const t = content[language];
   const [loading, setLoading] = useState<boolean>(false);
   const [product, setProduct] = useState(null);
