@@ -8,7 +8,7 @@ export async function GET(
   try {
 
     const response = await fetch(
-      `/api/course/${params.id}`,
+      `https://atplc20.pythonanywhere.com/course/${params.id}/`,
       {
         cache: "no-store",
       }
