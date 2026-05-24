@@ -45,7 +45,7 @@ export default function Checkout() {
       if (params.provider !== "atplc") return;
 
       const response = await fetch(
-        `https://atplc20.pythonanywhere.com/course/${params.id}/`
+        `/api/course/${params.id}`
       );
 
       if (!response.ok) {
