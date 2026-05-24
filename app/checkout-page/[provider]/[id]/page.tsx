@@ -48,7 +48,13 @@ export default function Checkout() {
 
       const data = await response.json();
 
-      setCartItem(data.course);
+      setCartItem({id: data.id,
+    name: data.Course_Name,
+    provider: "ATPLC",
+    price: data.Course_Price,
+    description: "Summer Internship Program",
+    requiresGst: true,
+  });
     }
 
     fetchCourse();
