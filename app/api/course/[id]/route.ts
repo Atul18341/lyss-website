@@ -1,39 +1,45 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
 
   try {
 
+    const params = await context.params;
+
     const id = params.id;
 
-    console.log("Course ID:", id);
+    console.log("ID:", id);
 
-    const djangoResponse = await fetch(
+    const response = await fetch(
       `https://atplc20.pythonanywhere.com/course/${id}/`,
       {
-        method: "GET",
         cache: "no-store",
       }
     );
 
-    console.log("Django Status:", djangoResponse.status);
+    if (!response.ok) {
 
-    // Read raw text first
-    const text = await djangoResponse.text();
+      return NextResponse.json(
+        {
+          error: "Course not found",
+        },
+        {
+          status: response.status,
+        }
+      );
 
-    console.log("Django Response:", text);
+    }
 
-    // Convert safely to JSON
-    const data = JSON.parse(text);
+    const data = await response.json();
 
     return NextResponse.json(data);
 
   } catch (error) {
 
-    console.error("Route Error:", error);
+    console.error(error);
 
     return NextResponse.json(
       {
