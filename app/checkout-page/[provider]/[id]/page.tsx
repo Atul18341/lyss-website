@@ -9,7 +9,7 @@ import { content } from '../../../translations';
 interface CheckoutItem {
   id: string;
   name: string;
-  provider: 'LYSS_SOFTWARE' | 'LYSS_EVENT' | 'ATPLC_TRAINING';
+  provider: string;
   price: number;
   description: string;
   requiresGst: boolean;
@@ -22,7 +22,6 @@ export default function Checkout() {
   const [language] = useState<'en' | 'hi'>('en');
   const t = content[language];
   const [loading, setLoading] = useState<boolean>(false);
-  const [product, setProduct] = useState(null);
   // Form Fields State
   const [customer, setCustomer] = useState({ name: '', mobile: '', email: '' });
 
@@ -38,9 +37,24 @@ export default function Checkout() {
 
   // Safe Session Storage processing module on layout mount
   useEffect(() => {
-    const storedData = sessionStorage.getItem('pendingCheckout');
-    
-    if (storedData) {
+
+    async function fetchCourse() {
+
+      if (params.provider !== "atplc") return;
+
+      const response = await fetch(
+        `https://atplc20.pythonanywhere.com/course/${params.id}/`
+      );
+
+      const data = await response.json();
+
+      setCartItem(data.course);
+    }
+
+    fetchCourse();
+
+  }, [params.provider, params.id]);
+    /*else if (storedData) {
       try {
         const parsedItem = JSON.parse(storedData);
         
@@ -58,8 +72,7 @@ export default function Checkout() {
       } catch (error) {
         console.error("Failed to safely decode purchase transaction payload variables:", error);
       }
-    }
-  }, []);
+    }*/
 
   const totalAmount = cartItem.requiresGst ? cartItem.price * 1.18 : cartItem.price;
 
