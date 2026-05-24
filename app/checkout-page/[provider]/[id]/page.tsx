@@ -38,7 +38,9 @@ export default function Checkout() {
   // Safe Session Storage processing module on layout mount
   useEffect(() => {
 
-    async function fetchCourse() {
+  async function fetchCourse() {
+
+    try {
 
       if (params.provider !== "atplc") return;
 
@@ -46,20 +48,38 @@ export default function Checkout() {
         `https://atplc20.pythonanywhere.com/course/${params.id}/`
       );
 
+      if (!response.ok) {
+        throw new Error("Failed to fetch course");
+      }
+
       const data = await response.json();
 
-      setCartItem({id: data.id,
-    name: data.Course_Name,
-    provider: "ATPLC",
-    price: data.Course_Price,
-    description: "Summer Internship Program",
-    requiresGst: true,
-  });
+      console.log("API Response:", data);
+
+      const course = data.course;
+
+      setCartItem({
+        id: String(course.id),
+        name: course.Course_Name,
+        provider: "ATPLC",
+        price: Number(course.Course_Price),
+        description:
+          course.Course_Description ||
+          "Summer Internship Program",
+        requiresGst: true,
+      });
+
+    } catch (error) {
+
+      console.error("Course Fetch Error:", error);
+
     }
 
-    fetchCourse();
+  }
 
-  }, [params.provider, params.id]);
+  fetchCourse();
+
+}, [params.provider, params.id]);
     /*else if (storedData) {
       try {
         const parsedItem = JSON.parse(storedData);
