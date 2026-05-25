@@ -158,7 +158,7 @@ export default function Checkout() {
       <Script
         id="paytm-checkout-js"
         strategy="afterInteractive"
-        src="https://secure.paytmpayments.com/merchantpgpui/checkoutjs/merchants/UgSSdh19535390771074.js"
+        src="https://secure.paytmpayments.com/merchantpgpui/checkoutjs/merchants/imHHwX41542058372914.js"
       />
       
       <Navbar t={t.nav} language={language} setLanguage={() => {}} />
