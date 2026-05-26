@@ -29,7 +29,18 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, message: "Ledger updated securely." });
 
-  } catch (error) {
-    return NextResponse.json({ error: "Internal Server Middleware processing error." }, { status: 500 });
-  }
+  } catch (error: any) {
+  // 💡 This prints the REAL error code directly to your terminal or Vercel dashboard console!
+  console.error("=== MIDDLEWARE CRASH INSPECTION LOG ===");
+  console.error("Message:", error?.message);
+  console.error("Full Stack Trace:", error);
+  
+  return NextResponse.json(
+    { 
+      error: "Internal Server Middleware processing error.",
+      debugDetails: error?.message || "Unknown error" // 👈 Temporarily pipe it to your screen to see it live
+    }, 
+    { status: 500 }
+  );
+}
 }

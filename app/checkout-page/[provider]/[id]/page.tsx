@@ -265,21 +265,17 @@ export default function Checkout() {
                         <option value="BCA">BCA (Bachelor of Computer Applications)</option>
                         <option value="MCA">MCA (Master of Computer Applications)</option>
                         <option value="BSC">B.Sc (Bachelor of Science)</option>
+                        <option value="BA">B.A (Bachelor of Arts)</option>
+                        <option value="B.COM">B.COM (Bachelor of Commerce)</option>
                       </select>
                     </div>
                     <div>
                       <label className="block text-xs font-bold uppercase text-slate-500 mb-2">Department</label>
-                      <select 
-                        required value={customer.department}
-                        onChange={(e) => setCustomer({...customer, department: e.target.value})}
-                        className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm focus:border-purple-900 transition appearance-none"
-                      >
-                        <option value="">Select Department</option>
-                        <option value="CSE">Computer Science & Engineering</option>
-                        <option value="IT">Information Technology</option>
-                        <option value="ECE">Electronics & Communication</option>
-                        <option value="MECH">Mechanical Engineering</option>
-                      </select>
+                      <input 
+                      type="text" required value={customer.department}
+                      onChange={(e) => setCustomer({...customer, department: e.target.value})}
+                      className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 outline-none text-sm focus:border-purple-900 transition" 
+                    />
                     </div>
                   </div>
                   <div>
@@ -365,12 +361,12 @@ export default function Checkout() {
               {cartItem.requiresGst && (
                 <div className="flex justify-between opacity-80 text-xs text-slate-400">
                   <span>Integrated Tax (GST 18%)</span>
-                  <span>₹{(cartItem.price * 0.18).toLocaleString('en-IN')}.00</span>
+                  <span>₹{(cartItem.price * 0.18).toLocaleString('en-IN')}</span>
                 </div>
               )}
               <div className="flex justify-between font-bold text-base text-purple-400 pt-2 border-t border-white/5">
                 <span>Payable Amount</span>
-                <span>₹{totalAmount.toLocaleString('en-IN')}.00</span>
+                <span>₹{totalAmount.toLocaleString('en-IN')}</span>
               </div>
             </div>
           </div>
