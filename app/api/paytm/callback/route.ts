@@ -35,7 +35,7 @@ export async function POST(req: Request) {
       // await db.order.update({ where: { id: orderId }, data: { paid: true, transactionId: txnId } });
 
       return NextResponse.redirect(
-        new URL(`/checkout-page/status?status=success&txnId=${txnId}`, req.url),
+        new URL(`/checkout-page/status?status=success&txnId=${txnId}&orderId=${orderId}`, req.url),
         303
       );
     }
