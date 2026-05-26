@@ -99,8 +99,9 @@ function StatusCardContent() {
 
           {/* Persistent receipt card layout block data point */}
           <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left text-sm text-gray-600 space-y-2">
-            <div><strong>Order ID:</strong> {orderId || 'N/A'}</div>
+            
             <div><strong>Transaction ID:</strong> {txnId}</div>
+            <div><strong>Login to download acceptance letter and resume internship.</strong> {txnId}</div>
             <div><strong>Sync Status:</strong> <span className={`font-bold ${syncStatus === 'SUCCESS' ? 'text-green-600' : syncStatus === 'FAILED' ? 'text-red-500' : 'text-blue-500'}`}>{syncStatus}</span></div>
           </div>
         </div>
@@ -122,8 +123,8 @@ function StatusCardContent() {
         </div>
       )}
 
-      <Link href="/dashboard" className="inline-block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200">
-        Return to Dashboard
+      <Link href="https://atplc.in/login" className="inline-block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200">
+        Login
       </Link>
     </div>
   );
