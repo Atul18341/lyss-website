@@ -101,7 +101,7 @@ function StatusCardContent() {
           <div className="bg-gray-50 rounded-lg p-4 mb-6 text-left text-sm text-gray-600 space-y-2">
             
             <div><strong>Transaction ID:</strong> {txnId}</div>
-            <div><strong>Login to download acceptance letter and resume internship.</strong> {txnId}</div>
+            <div><strong>Login to download acceptance letter and resume internship.</strong></div>
             <div><strong>Sync Status:</strong> <span className={`font-bold ${syncStatus === 'SUCCESS' ? 'text-green-600' : syncStatus === 'FAILED' ? 'text-red-500' : 'text-blue-500'}`}>{syncStatus}</span></div>
           </div>
         </div>
